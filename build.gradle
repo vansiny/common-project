@@ -1,0 +1,67 @@
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+sourceSets {
+    main {
+		java {
+            srcDirs = ['src/main/java']
+        }
+        scala {
+            srcDirs = ['src/main/scala']
+        }
+    }
+    test {
+		java {
+            srcDirs = ['src/test/java']
+        }
+        scala {
+            srcDirs = ['src/test/scala']
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+  compile 'com.typesafe.akka:akka-actor_2.12:2.5.16'
+  testCompile 'com.typesafe.akka:akka-testkit_2.12:2.5.16'
+  testCompile 'org.scalatest:scalatest_2.12:3.0.5'
+}
+/*
+eclipse{
+	classpath {
+		file {
+			//Filter dependencies which are not jar
+			withXml {
+				Node rootNode = it.asNode()
+				List unexpectedNodes = rootNode.children().findAll{
+					def pathAttr = it.attribute('path')
+					def kindAttr = it.attribute('kind')
+					def nonJar = !pathAttr?.toString()?.endsWith('jar')&&(kindAttr?.toString()=='lib')
+					//filter scala library in eclipse .classpath, otherwise these jars will have conflict with default scala sdk
+					String[] scalaLibs = ['scala-library','scala-compiler','scala-parent','scala-reflect','scala-xml']
+					def isScalaLib = !(scalaLibs.find{pathAttr?.toString()?.contains(it)}==null)
+					//def isScalaLib = pathAttr?.toString()?.contains('scala-lang')
+					nonJar||isScalaLib
+					//!it.attribute('path')?.toString()?.endsWith('jar')&&(it.attribute('kind')?.toString()=='lib')
+				}
+				unexpectedNodes.each{
+					rootNode.remove(it)
+				}
+			}
+		}
+	}
+}
+*/
+
+mainClassName = "com.lightbend.akka.sample.AkkaQuickstart"
+
+run {
+  standardInput = System.in
+}
